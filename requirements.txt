@@ -3,3 +3,4 @@ huggingface_hub==0.24.5
 nltk==3.8.1
 torch==2.4.1
 pandas
+gradio==4.36.1
