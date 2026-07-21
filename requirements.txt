@@ -17,3 +17,4 @@ evaluate==0.4.2
 bitsandbytes==0.43.3
 peft
 trl==0.9.6
+starlette<0.38.0
