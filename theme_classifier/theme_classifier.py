@@ -12,6 +12,7 @@ sys.path.append(str(folder_path.parent))
 from utils import load_subtitles_dataset
 
 nltk.download('punkt')
+nltk.download('punkt_tab')
 
 
 class ThemeClassifier:
@@ -22,7 +23,12 @@ class ThemeClassifier:
         self.theme_classifier = self.load_model(self.device)
 
     def load_model(self, device):
-        theme_classifier = pipeline("zero-shot-classification", model=self.model_name, device=device)
+        theme_classifier = pipeline(
+            "zero-shot-classification",
+            model=self.model_name,
+            device=device
+        )
+
         return theme_classifier
     
     def get_themes_inference(self, script):
@@ -37,7 +43,7 @@ class ThemeClassifier:
         
         # Run Model
         theme_output = self.theme_classifier(
-            script_batches[:2],
+            script_batches,
             self.theme_list,
             multi_label=True
         )

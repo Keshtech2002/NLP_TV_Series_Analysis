@@ -1,0 +1,3 @@
+https://subtitlist.com/subs/naruto-season-1/english/2206507 - Contains the subtitles to each episode in the naruto movie
+https://www.kaggle.com/datasets/leonzatrax/naruto-ep-1-transcript - Contains the character that said each statement in the naruto movie
+https://naruto.fandom.com/wiki/Special:BrowseData/Jutsu?limit=250&offset=0&_cat=Jutsu - Dataset for ninja attacks
