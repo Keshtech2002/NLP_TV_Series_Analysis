@@ -1,0 +1,3 @@
+KeshtechABU/jutsu_classifier
+/home/keshtech/Documents/Keshtech/AI-ML_Projects/NLP_TV_Series_Analysis/data/jutsus.jsonl
+The Rasengan is an A-rank, close-range ninjutsu from the Naruto series, featuring no hand seals, pure shape transformation, and a spinning sphere of chakra. It was created by Minato Namikaze.

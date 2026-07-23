@@ -2,6 +2,9 @@ import gradio as gr
 import pandas as pd
 from character_network import CharacterNetworkGenerator, NamedEntityRecognizer
 from theme_classifier import ThemeClassifier
+from text_classification import JutsuClassifier
+
+import os
 
 # ==========================================
 # 1. Event Handler Functions
@@ -53,6 +56,17 @@ def get_character_network(subtitles_path, ner_path):
 
     # Return HTML string directly to update gr.HTML component
     return html
+
+
+def classify_text(text_classifcation_model, text_classifcation_data_path, text_to_classify):
+    jutsu_classifier = JutsuClassifier(
+        model_path=text_classifcation_model,
+        data_path=text_classifcation_data_path,
+        huggingface_token=os.getenv("huggingface_token"),
+    )
+
+    output = jutsu_classifier.classify_jutsu(text_to_classify)
+    return output[0]
 
 
 # ==========================================
@@ -147,6 +161,50 @@ def main():
             fn=get_character_network,
             inputs=[subtitles_path_input2, ner_path_input],
             outputs=[network_html_output],
+        )
+
+        gr.HTML("<hr>")
+
+        # ------------------------------------------
+        # Section 3: Text Classification with LLMs
+        # ------------------------------------------
+        gr.Markdown("## 🤖 Text Classification with LLMs")
+        with gr.Row():
+            # Left Column: Inputs & Controls
+            with gr.Column(scale=1):
+                text_classifcation_model = gr.Textbox(
+                    label="Model Path",
+                    placeholder="KeshtechABU/jutsu_classifier",
+                )
+                text_classifcation_data_path = gr.Textbox(
+                    label="Data Path",
+                    placeholder="/content/data/jutsus.jsonl",
+                )
+                text_to_classify = gr.Textbox(
+                    label="Text input",
+                    lines=4,
+                    placeholder="The Rasengan is an A-rank, close-range ninjutsu.",
+                )
+                classify_text_button = gr.Button(
+                    "Classify Text (Jutsu)", variant="primary"
+                )
+
+            # Right Column: Text Output
+            with gr.Column(scale=2):
+                text_classification_output = gr.Textbox(
+                    label="Text Classification Output",
+                    lines=4,
+                )
+
+        # Wire Text Classification Button Click Event
+        classify_text_button.click(
+            fn=classify_text,
+            inputs=[
+                text_classifcation_model,
+                text_classifcation_data_path,
+                text_to_classify,
+            ],
+            outputs=[text_classification_output],
         )
 
     # Launch interface (passing theme in launch() for Gradio 6.0+)
