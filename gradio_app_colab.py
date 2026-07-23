@@ -66,7 +66,12 @@ def classify_text(text_classifcation_model, text_classifcation_data_path, text_t
     )
 
     output = jutsu_classifier.classify_jutsu(text_to_classify)
-    return output[0]
+
+    # Extract the key with the highest score (e.g., 'Ninjutsu')
+    if isinstance(output, dict) and output:
+        return max(output, key=output.get)
+    
+    return output  # <-- Return output directly (no [0])
 
 
 # ==========================================

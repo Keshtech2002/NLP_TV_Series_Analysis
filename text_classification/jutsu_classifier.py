@@ -15,6 +15,7 @@ from .cleaner import Cleaner
 from .training_utils import get_class_weights,compute_metrics
 from .custom_trainer import CustomTrainer
 
+
 class JutsuClassifier():
     def __init__(self,
                  model_path,
@@ -86,7 +87,7 @@ class JutsuClassifier():
             model=model,
             args=training_args,
             train_dataset = train_data,
-            eval_dataset = test_data,
+            evaluation_dataset = test_data,
             tokenizer = self.tokenizer,
             data_collator=data_collator,
             compute_metrics= compute_metrics
@@ -158,14 +159,21 @@ class JutsuClassifier():
             tokenizer = AutoTokenizer.from_pretrained(self.model_name)
         return tokenizer
 
-    def postprocess(self,model_output):
-        output=[]
-        for pred in model_output:
-            label = max(pred, key=lambda x: x['score'])['label']
-            output.append(label)
-        return output
+    def postprocess(self, model_output):
+        # Flatten pipeline list structure
+        if isinstance(model_output, list) and len(model_output) > 0:
+            if isinstance(model_output[0], list):
+                model_output = model_output[0]
 
-    def classify_jutsu(self,text):
+        # Convert pipeline output list into {label: probability} dictionary
+        dict_output = {}
+        for item in model_output:
+            if isinstance(item, dict):
+                dict_output[item["label"]] = item["score"]
+
+        return dict_output
+
+    def classify_jutsu(self, text):
         model_output = self.model(text)
-        predictions =self.postprocess(model_output)
+        predictions = self.postprocess(model_output)
         return predictions

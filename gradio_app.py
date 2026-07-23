@@ -45,9 +45,9 @@ def get_character_network(subtitles_path,ner_path):
     return html
 
 
-def classify_text(text_classifcation_model,text_classifcation_data_path,text_to_classify):
-    jutsu_classifier = JutsuClassifier(model_path = text_classifcation_model,
-                                       data_path = text_classifcation_data_path,
+def classify_text(text_classification_model,text_classification_data_path,text_to_classify):
+    jutsu_classifier = JutsuClassifier(model_path = text_classification_model,
+                                       data_path = text_classification_data_path,
                                        huggingface_token = os.getenv('huggingface_token'))
     
     output = jutsu_classifier.classify_jutsu(text_to_classify)
@@ -88,7 +88,7 @@ def main():
 
 
 
-         # Text Classification with LLMs
+        # Text Classification with LLMs
         with gr.Row():
             with gr.Column():
                 gr.HTML("<h1>Text Classification with LLMs</h1>")
@@ -96,11 +96,11 @@ def main():
                     with gr.Column():
                         text_classification_output = gr.Textbox(label="Text Classification Output")
                     with gr.Column():
-                        text_classifcation_model = gr.Textbox(label='Model Path')
-                        text_classifcation_data_path = gr.Textbox(label='Data Path')
+                        text_classification_model = gr.Textbox(label='Model Path')
+                        text_classification_data_path = gr.Textbox(label='Data Path')
                         text_to_classify = gr.Textbox(label='Text input')
-                        classify_text_button = gr.Button("Clasify Text (Jutsu)")
-                        classify_text_button.click(classify_text, inputs=[text_classifcation_model,text_classifcation_data_path,text_to_classify], outputs=[text_classification_output])
+                        classify_text_button = gr.Button("Classify Text (Jutsu)")
+                        classify_text_button.click(classify_text, inputs=[text_classification_model,text_classification_data_path,text_to_classify], outputs=[text_classification_output])
 
 
     iface.launch(share=True)
