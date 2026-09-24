@@ -3,6 +3,7 @@ import pandas as pd
 from character_network import CharacterNetworkGenerator, NamedEntityRecognizer
 from theme_classifier import ThemeClassifier
 from text_classification import JutsuClassifier
+from character_chatbot import CharacterChatBot
 
 import os
 
@@ -72,6 +73,16 @@ def classify_text(text_classifcation_model, text_classifcation_data_path, text_t
         return max(output, key=output.get)
     
     return output  # <-- Return output directly (no [0])
+
+
+def chat_with_character_chatbot(message, history):
+    character_chatbot = CharacterChatBot("AbdullahTarek/Naruto_Llama-3-8B",
+                                         huggingface_token = os.getenv('huggingface_token')
+                                         )
+
+    output = character_chatbot.chat(message, history)
+    output = output['content'].strip()
+    return output
 
 
 # ==========================================
@@ -211,6 +222,17 @@ def main():
             ],
             outputs=[text_classification_output],
         )
+
+
+
+        # Character Chatbot Section
+        with gr.Row():
+            with gr.Column():
+                gr.HTML("<h1>Character Chatbot</h1>")
+                gr.ChatInterface(
+                    fn=chat_with_character_chatbot,
+                    title="Character Chatbot",
+                )
 
     # Launch interface (passing theme in launch() for Gradio 6.0+)
     iface.launch(share=True, theme=gr.themes.Soft())
